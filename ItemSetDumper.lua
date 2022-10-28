@@ -52,6 +52,7 @@ function ItemSetDumper.ProcessItem(itemSetId, type)
         local numPieces = GetNumItemSetCollectionPieces(itemSetId)
         local pieceId, slot = GetItemSetCollectionPieceInfo(itemSetId, 1)
         local itemLink = GetItemSetCollectionPieceItemLink(pieceId, LINK_STYLE_DEFAULT, ITEM_TRAIT_TYPE_NONE)
+        local armorType = GetItemLinkArmorType(itemLink)
         local hasSet, setName, numBonuses, numNormalEquipped, maxEquipped, setId, numPerfectedEquipped = GetItemLinkSetInfo(itemLink)
         ItemSetDumper.savedData[itemSetId]["pieces"] = numPieces
         ItemSetDumper.savedData[itemSetId]["itemLink"] = itemLink
@@ -66,6 +67,13 @@ function ItemSetDumper.ProcessItem(itemSetId, type)
         ItemSetDumper.savedData[itemSetId]["categoryName"] = itemSetCollectionCategoryName
         ItemSetDumper.savedData[itemSetId]["parentCategoryID"] = itemSetCollectionParentCategoryID
         ItemSetDumper.savedData[itemSetId]["parentCategoryName"] = itemSetCollectionParentCategoryName
+        if armorType == ARMORTYPE_HEAVY then
+            ItemSetDumper.savedData[itemSetId]["armorType"] = "Heavy"
+        elseif armorType == ARMORTYPE_MEDIUM then
+            ItemSetDumper.savedData[itemSetId]["armorType"] = "Medium"
+        elseif armorType == ARMORTYPE_LIGHT then
+            ItemSetDumper.savedData[itemSetId]["armorType"] = "Light"
+        end
         ItemSetDumper.savedData[itemSetId]["type"] = type
 
         if not ItemSetDumper.savedData[itemSetId]["bonuses"] then
@@ -80,6 +88,7 @@ function ItemSetDumper.ProcessItem(itemSetId, type)
         local hasSet, setName, numBonuses, numNormalEquipped, maxEquipped, setId, numPerfectedEquipped = GetItemLinkSetInfo(itemLink)
 
         if not isempty(setName) and not ItemSetDumper.savedData[setId] then
+
             ItemSetDumper.savedData[setId] = {}
             ItemSetDumper.savedData[setId]["setName"] = setName
             ItemSetDumper.savedData[setId]["itemLink"] = itemLink
